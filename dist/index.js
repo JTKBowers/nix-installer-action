@@ -6153,11 +6153,11 @@ exports.AbortSignal = AbortSignal;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 
-var coreRestPipeline = __nccwpck_require__(2655);
+var coreRestPipeline = __nccwpck_require__(4780);
 var tslib = __nccwpck_require__(1577);
 var coreAuth = __nccwpck_require__(9967);
 var coreUtil = __nccwpck_require__(402);
-var coreHttpCompat = __nccwpck_require__(7184);
+var coreHttpCompat = __nccwpck_require__(9781);
 var coreClient = __nccwpck_require__(8953);
 var coreXml = __nccwpck_require__(9343);
 var logger$1 = __nccwpck_require__(5851);
@@ -32692,14 +32692,14 @@ module.exports["default"] = deferToConnect;
 
 /***/ }),
 
-/***/ 5185:
+/***/ 1718:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
 
-const validator = __nccwpck_require__(1549);
-const XMLParser = __nccwpck_require__(7528);
-const XMLBuilder = __nccwpck_require__(7591);
+const validator = __nccwpck_require__(8750);
+const XMLParser = __nccwpck_require__(5432);
+const XMLBuilder = __nccwpck_require__(8040);
 
 module.exports = {
   XMLParser: XMLParser,
@@ -32709,7 +32709,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5688:
+/***/ 5901:
 /***/ ((module) => {
 
 function getIgnoreAttributesFn(ignoreAttributes) {
@@ -32735,7 +32735,7 @@ module.exports = getIgnoreAttributesFn
 
 /***/ }),
 
-/***/ 8151:
+/***/ 7462:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -32814,12 +32814,12 @@ exports.nameRegexp = nameRegexp;
 
 /***/ }),
 
-/***/ 1549:
+/***/ 8750:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
 
-const util = __nccwpck_require__(8151);
+const util = __nccwpck_require__(7462);
 
 const defaultOptions = {
   allowBooleanAttributes: false, //A tag can have attributes without any value
@@ -33246,13 +33246,13 @@ function getPositionFromMatch(match) {
 
 /***/ }),
 
-/***/ 7591:
+/***/ 8040:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
 //parse Empty Node as self closing node
-const buildFromOrderedJs = __nccwpck_require__(2897);
-const getIgnoreAttributesFn = __nccwpck_require__(5688)
+const buildFromOrderedJs = __nccwpck_require__(6788);
+const getIgnoreAttributesFn = __nccwpck_require__(5901)
 
 const defaultOptions = {
   attributeNamePrefix: '@_',
@@ -33342,6 +33342,8 @@ Builder.prototype.j2x = function(jObj, level, ajPath) {
     } else if (jObj[key] === null) {
       // null attribute should be ignored by the attribute list, but should not cause the tag closing
       if (this.isAttribute(key)) {
+        val += '';
+      } else if (key === this.options.cdataPropName) {
         val += '';
       } else if (key[0] === '?') {
         val += this.indentate(level) + '<' + key + '?' + this.tagEndChar;
@@ -33537,7 +33539,7 @@ module.exports = Builder;
 
 /***/ }),
 
-/***/ 2897:
+/***/ 6788:
 /***/ ((module) => {
 
 const EOL = "\n";
@@ -33679,10 +33681,10 @@ module.exports = toXml;
 
 /***/ }),
 
-/***/ 3147:
+/***/ 3992:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const util = __nccwpck_require__(8151);
+const util = __nccwpck_require__(7462);
 
 //TODO: handle comments
 function readDocType(xmlData, i){
@@ -33839,7 +33841,7 @@ module.exports = readDocType;
 
 /***/ }),
 
-/***/ 3013:
+/***/ 2700:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -33893,17 +33895,17 @@ exports.defaultOptions = defaultOptions;
 
 /***/ }),
 
-/***/ 5717:
+/***/ 3296:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
 ///@ts-check
 
-const util = __nccwpck_require__(8151);
-const xmlNode = __nccwpck_require__(887);
-const readDocType = __nccwpck_require__(3147);
+const util = __nccwpck_require__(7462);
+const xmlNode = __nccwpck_require__(248);
+const readDocType = __nccwpck_require__(3992);
 const toNumber = __nccwpck_require__(6349);
-const getIgnoreAttributesFn = __nccwpck_require__(5688)
+const getIgnoreAttributesFn = __nccwpck_require__(5901)
 
 // const regx =
 //   '<((!\\[CDATA\\[([\\s\\S]*?)(]]>))|((NAME:)?(NAME))([^>]*)>|((\\/)(NAME)\\s*>))([^<]*)'
@@ -34327,7 +34329,7 @@ const replaceEntitiesValue = function(val){
 }
 function saveTextToParentTag(textData, currentNode, jPath, isLeafNode) {
   if (textData) { //store previously collected data as textNode
-    if(isLeafNode === undefined) isLeafNode = Object.keys(currentNode.child).length === 0
+    if(isLeafNode === undefined) isLeafNode = currentNode.child.length === 0
     
     textData = this.parseTextData(textData,
       currentNode.tagname,
@@ -34506,13 +34508,13 @@ module.exports = OrderedObjParser;
 
 /***/ }),
 
-/***/ 7528:
+/***/ 5432:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const { buildOptions} = __nccwpck_require__(3013);
-const OrderedObjParser = __nccwpck_require__(5717);
-const { prettify} = __nccwpck_require__(1814);
-const validator = __nccwpck_require__(1549);
+const { buildOptions} = __nccwpck_require__(2700);
+const OrderedObjParser = __nccwpck_require__(3296);
+const { prettify} = __nccwpck_require__(8285);
+const validator = __nccwpck_require__(8750);
 
 class XMLParser{
     
@@ -34570,7 +34572,7 @@ module.exports = XMLParser;
 
 /***/ }),
 
-/***/ 1814:
+/***/ 8285:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -34690,7 +34692,7 @@ exports.prettify = prettify;
 
 /***/ }),
 
-/***/ 887:
+/***/ 248:
 /***/ ((module) => {
 
 
@@ -65339,7 +65341,7 @@ function isTokenCredential(credential) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.authorizeRequestOnClaimChallenge = exports.parseCAEChallenge = void 0;
 const log_js_1 = __nccwpck_require__(5151);
-const base64_js_1 = __nccwpck_require__(1201);
+const base64_js_1 = __nccwpck_require__(3582);
 /**
  * Converts: `Bearer a="b", c="d", Bearer d="e", f="g"`.
  * Into: `[ { a: 'b', c: 'd' }, { d: 'e', f: 'g' } ]`.
@@ -65533,7 +65535,7 @@ function requestToOptions(request) {
 
 /***/ }),
 
-/***/ 1201:
+/***/ 3582:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -65591,7 +65593,7 @@ exports.decodeStringToString = decodeStringToString;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.deserializationPolicy = exports.deserializationPolicyName = void 0;
 const interfaces_js_1 = __nccwpck_require__(4617);
-const core_rest_pipeline_1 = __nccwpck_require__(2655);
+const core_rest_pipeline_1 = __nccwpck_require__(4780);
 const serializer_js_1 = __nccwpck_require__(8913);
 const operationHelpers_js_1 = __nccwpck_require__(5047);
 const defaultJsonContentTypes = ["application/json", "text/json"];
@@ -65831,7 +65833,7 @@ async function parse(jsonContentTypes, xmlContentTypes, operationResponse, opts,
 // Licensed under the MIT license.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getCachedDefaultHttpClient = void 0;
-const core_rest_pipeline_1 = __nccwpck_require__(2655);
+const core_rest_pipeline_1 = __nccwpck_require__(4780);
 let cachedHttpClient;
 function getCachedDefaultHttpClient() {
     if (!cachedHttpClient) {
@@ -66074,7 +66076,7 @@ exports.getOperationRequestInfo = getOperationRequestInfo;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createClientPipeline = void 0;
 const deserializationPolicy_js_1 = __nccwpck_require__(8290);
-const core_rest_pipeline_1 = __nccwpck_require__(2655);
+const core_rest_pipeline_1 = __nccwpck_require__(4780);
 const serializationPolicy_js_1 = __nccwpck_require__(7895);
 /**
  * Creates a new Pipeline for use with a Service Client.
@@ -66275,7 +66277,7 @@ function prepareXMLRootList(obj, elementName, xmlNamespaceKey, xmlNamespace) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MapperTypeNames = exports.createSerializer = void 0;
 const tslib_1 = __nccwpck_require__(1577);
-const base64 = tslib_1.__importStar(__nccwpck_require__(1201));
+const base64 = tslib_1.__importStar(__nccwpck_require__(3582));
 const interfaces_js_1 = __nccwpck_require__(4617);
 const utils_js_1 = __nccwpck_require__(7316);
 class SerializerImpl {
@@ -67207,7 +67209,7 @@ exports.MapperTypeNames = {
 // Licensed under the MIT license.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServiceClient = void 0;
-const core_rest_pipeline_1 = __nccwpck_require__(2655);
+const core_rest_pipeline_1 = __nccwpck_require__(4780);
 const pipeline_js_1 = __nccwpck_require__(4971);
 const utils_js_1 = __nccwpck_require__(7316);
 const httpClientCache_js_1 = __nccwpck_require__(5210);
@@ -67750,18 +67752,18 @@ exports.flattenResponse = flattenResponse;
 
 /***/ }),
 
-/***/ 5732:
+/***/ 5651:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExtendedServiceClient = void 0;
-const disableKeepAlivePolicy_js_1 = __nccwpck_require__(3951);
-const core_rest_pipeline_1 = __nccwpck_require__(2655);
+const disableKeepAlivePolicy_js_1 = __nccwpck_require__(5770);
+const core_rest_pipeline_1 = __nccwpck_require__(4780);
 const core_client_1 = __nccwpck_require__(8953);
-const response_js_1 = __nccwpck_require__(9);
+const response_js_1 = __nccwpck_require__(1124);
 /**
  * Client to provide compatability between core V1 & V2.
  */
@@ -67811,16 +67813,16 @@ exports.ExtendedServiceClient = ExtendedServiceClient;
 
 /***/ }),
 
-/***/ 4094:
+/***/ 4891:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.convertHttpClient = void 0;
-const response_js_1 = __nccwpck_require__(9);
-const util_js_1 = __nccwpck_require__(218);
+exports.convertHttpClient = convertHttpClient;
+const response_js_1 = __nccwpck_require__(1124);
+const util_js_1 = __nccwpck_require__(3013);
 /**
  * Converts a RequestPolicy based HttpClient to a PipelineRequest based HttpClient.
  * @param requestPolicyClient - A HttpClient compatible with core-http
@@ -67834,17 +67836,16 @@ function convertHttpClient(requestPolicyClient) {
         },
     };
 }
-exports.convertHttpClient = convertHttpClient;
 //# sourceMappingURL=httpClientAdapter.js.map
 
 /***/ }),
 
-/***/ 7184:
+/***/ 9781:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.toHttpHeadersLike = exports.convertHttpClient = exports.disableKeepAlivePolicyName = exports.HttpPipelineLogLevel = exports.createRequestPolicyFactoryPolicy = exports.requestPolicyFactoryPolicyName = exports.ExtendedServiceClient = void 0;
 /**
@@ -67852,30 +67853,32 @@ exports.toHttpHeadersLike = exports.convertHttpClient = exports.disableKeepAlive
  *
  * @packageDocumentation
  */
-var extendedClient_js_1 = __nccwpck_require__(5732);
+var extendedClient_js_1 = __nccwpck_require__(5651);
 Object.defineProperty(exports, "ExtendedServiceClient", ({ enumerable: true, get: function () { return extendedClient_js_1.ExtendedServiceClient; } }));
-var requestPolicyFactoryPolicy_js_1 = __nccwpck_require__(3850);
+var requestPolicyFactoryPolicy_js_1 = __nccwpck_require__(8919);
 Object.defineProperty(exports, "requestPolicyFactoryPolicyName", ({ enumerable: true, get: function () { return requestPolicyFactoryPolicy_js_1.requestPolicyFactoryPolicyName; } }));
 Object.defineProperty(exports, "createRequestPolicyFactoryPolicy", ({ enumerable: true, get: function () { return requestPolicyFactoryPolicy_js_1.createRequestPolicyFactoryPolicy; } }));
 Object.defineProperty(exports, "HttpPipelineLogLevel", ({ enumerable: true, get: function () { return requestPolicyFactoryPolicy_js_1.HttpPipelineLogLevel; } }));
-var disableKeepAlivePolicy_js_1 = __nccwpck_require__(3951);
+var disableKeepAlivePolicy_js_1 = __nccwpck_require__(5770);
 Object.defineProperty(exports, "disableKeepAlivePolicyName", ({ enumerable: true, get: function () { return disableKeepAlivePolicy_js_1.disableKeepAlivePolicyName; } }));
-var httpClientAdapter_js_1 = __nccwpck_require__(4094);
+var httpClientAdapter_js_1 = __nccwpck_require__(4891);
 Object.defineProperty(exports, "convertHttpClient", ({ enumerable: true, get: function () { return httpClientAdapter_js_1.convertHttpClient; } }));
-var util_js_1 = __nccwpck_require__(218);
+var util_js_1 = __nccwpck_require__(3013);
 Object.defineProperty(exports, "toHttpHeadersLike", ({ enumerable: true, get: function () { return util_js_1.toHttpHeadersLike; } }));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 3951:
+/***/ 5770:
 /***/ ((__unused_webpack_module, exports) => {
 
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pipelineContainsDisableKeepAlivePolicy = exports.createDisableKeepAlivePolicy = exports.disableKeepAlivePolicyName = void 0;
+exports.disableKeepAlivePolicyName = void 0;
+exports.createDisableKeepAlivePolicy = createDisableKeepAlivePolicy;
+exports.pipelineContainsDisableKeepAlivePolicy = pipelineContainsDisableKeepAlivePolicy;
 exports.disableKeepAlivePolicyName = "DisableKeepAlivePolicy";
 function createDisableKeepAlivePolicy() {
     return {
@@ -67886,28 +67889,27 @@ function createDisableKeepAlivePolicy() {
         },
     };
 }
-exports.createDisableKeepAlivePolicy = createDisableKeepAlivePolicy;
 /**
  * @internal
  */
 function pipelineContainsDisableKeepAlivePolicy(pipeline) {
     return pipeline.getOrderedPolicies().some((policy) => policy.name === exports.disableKeepAlivePolicyName);
 }
-exports.pipelineContainsDisableKeepAlivePolicy = pipelineContainsDisableKeepAlivePolicy;
 //# sourceMappingURL=disableKeepAlivePolicy.js.map
 
 /***/ }),
 
-/***/ 3850:
+/***/ 8919:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.createRequestPolicyFactoryPolicy = exports.requestPolicyFactoryPolicyName = exports.HttpPipelineLogLevel = void 0;
-const util_js_1 = __nccwpck_require__(218);
-const response_js_1 = __nccwpck_require__(9);
+exports.requestPolicyFactoryPolicyName = exports.HttpPipelineLogLevel = void 0;
+exports.createRequestPolicyFactoryPolicy = createRequestPolicyFactoryPolicy;
+const util_js_1 = __nccwpck_require__(3013);
+const response_js_1 = __nccwpck_require__(1124);
 /**
  * An enum for compatibility with RequestPolicy
  */
@@ -67954,21 +67956,21 @@ function createRequestPolicyFactoryPolicy(factories) {
         },
     };
 }
-exports.createRequestPolicyFactoryPolicy = createRequestPolicyFactoryPolicy;
 //# sourceMappingURL=requestPolicyFactoryPolicy.js.map
 
 /***/ }),
 
-/***/ 9:
+/***/ 1124:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toPipelineResponse = exports.toCompatResponse = void 0;
-const core_rest_pipeline_1 = __nccwpck_require__(2655);
-const util_js_1 = __nccwpck_require__(218);
+exports.toCompatResponse = toCompatResponse;
+exports.toPipelineResponse = toPipelineResponse;
+const core_rest_pipeline_1 = __nccwpck_require__(4780);
+const util_js_1 = __nccwpck_require__(3013);
 const originalResponse = Symbol("Original FullOperationResponse");
 /**
  * A helper to convert response objects from the new pipeline back to the old one.
@@ -68008,7 +68010,6 @@ function toCompatResponse(response, options) {
             headers });
     }
 }
-exports.toCompatResponse = toCompatResponse;
 /**
  * A helper to convert back to a PipelineResponse
  * @param compatResponse - A response compatible with `HttpOperationResponse` from core-http.
@@ -68025,20 +68026,22 @@ function toPipelineResponse(compatResponse) {
         return Object.assign(Object.assign({}, compatResponse), { headers, request: (0, util_js_1.toPipelineRequest)(compatResponse.request) });
     }
 }
-exports.toPipelineResponse = toPipelineResponse;
 //# sourceMappingURL=response.js.map
 
 /***/ }),
 
-/***/ 218:
+/***/ 3013:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
 // Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+// Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.HttpHeaders = exports.toHttpHeadersLike = exports.toWebResourceLike = exports.toPipelineRequest = void 0;
-const core_rest_pipeline_1 = __nccwpck_require__(2655);
+exports.HttpHeaders = void 0;
+exports.toPipelineRequest = toPipelineRequest;
+exports.toWebResourceLike = toWebResourceLike;
+exports.toHttpHeadersLike = toHttpHeadersLike;
+const core_rest_pipeline_1 = __nccwpck_require__(4780);
 // We use a custom symbol to cache a reference to the original request without
 // exposing it on the public interface.
 const originalRequestSymbol = Symbol("Original PipelineRequest");
@@ -68071,6 +68074,7 @@ function toPipelineRequest(webResource, options = {}) {
             onUploadProgress: webResource.onUploadProgress,
             proxySettings: webResource.proxySettings,
             streamResponseStatusCodes: webResource.streamResponseStatusCodes,
+            agent: webResource.agent,
         });
         if (options.originalRequest) {
             newRequest[originalClientRequestSymbol] =
@@ -68079,7 +68083,6 @@ function toPipelineRequest(webResource, options = {}) {
         return newRequest;
     }
 }
-exports.toPipelineRequest = toPipelineRequest;
 function toWebResourceLike(request, options) {
     var _a;
     const originalRequest = (_a = options === null || options === void 0 ? void 0 : options.originalRequest) !== null && _a !== void 0 ? _a : request;
@@ -68098,6 +68101,7 @@ function toWebResourceLike(request, options) {
         onUploadProgress: request.onUploadProgress,
         proxySettings: request.proxySettings,
         streamResponseStatusCodes: request.streamResponseStatusCodes,
+        agent: request.agent,
         clone() {
             throw new Error("Cannot clone a non-proxied WebResourceLike");
         },
@@ -68141,6 +68145,7 @@ function toWebResourceLike(request, options) {
                     "onUploadProgress",
                     "proxySettings",
                     "streamResponseStatusCodes",
+                    "agent",
                 ];
                 if (typeof prop === "string" && passThroughProps.includes(prop)) {
                     request[prop] = value;
@@ -68153,7 +68158,6 @@ function toWebResourceLike(request, options) {
         return webResource;
     }
 }
-exports.toWebResourceLike = toWebResourceLike;
 /**
  * Converts HttpHeaders from core-rest-pipeline to look like
  * HttpHeaders from core-http.
@@ -68163,7 +68167,6 @@ exports.toWebResourceLike = toWebResourceLike;
 function toHttpHeadersLike(headers) {
     return new HttpHeaders(headers.toJSON({ preserveCase: true }));
 }
-exports.toHttpHeadersLike = toHttpHeadersLike;
 /**
  * A collection of HttpHeaders that can be sent with a HTTP request.
  */
@@ -68679,7 +68682,7 @@ Object.defineProperty(exports, "createHttpPoller", ({ enumerable: true, get: fun
 /** legacy */
 tslib_1.__exportStar(__nccwpck_require__(6026), exports);
 tslib_1.__exportStar(__nccwpck_require__(5804), exports);
-tslib_1.__exportStar(__nccwpck_require__(2290), exports);
+tslib_1.__exportStar(__nccwpck_require__(9909), exports);
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -68831,7 +68834,7 @@ exports.GenericPollOperation = GenericPollOperation;
 
 /***/ }),
 
-/***/ 2290:
+/***/ 9909:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -69647,7 +69650,7 @@ exports.buildCreatePoller = buildCreatePoller;
 
 /***/ }),
 
-/***/ 3666:
+/***/ 3425:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -69655,13 +69658,13 @@ exports.buildCreatePoller = buildCreatePoller;
 // Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DEFAULT_RETRY_POLICY_COUNT = exports.SDK_VERSION = void 0;
-exports.SDK_VERSION = "1.18.2";
+exports.SDK_VERSION = "1.19.0";
 exports.DEFAULT_RETRY_POLICY_COUNT = 3;
 //# sourceMappingURL=constants.js.map
 
 /***/ }),
 
-/***/ 6691:
+/***/ 388:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -69669,19 +69672,20 @@ exports.DEFAULT_RETRY_POLICY_COUNT = 3;
 // Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createPipelineFromOptions = createPipelineFromOptions;
-const logPolicy_js_1 = __nccwpck_require__(4950);
-const pipeline_js_1 = __nccwpck_require__(5493);
-const redirectPolicy_js_1 = __nccwpck_require__(9654);
-const userAgentPolicy_js_1 = __nccwpck_require__(2520);
-const multipartPolicy_js_1 = __nccwpck_require__(6352);
-const decompressResponsePolicy_js_1 = __nccwpck_require__(278);
-const defaultRetryPolicy_js_1 = __nccwpck_require__(847);
-const formDataPolicy_js_1 = __nccwpck_require__(2696);
+const logPolicy_js_1 = __nccwpck_require__(6815);
+const pipeline_js_1 = __nccwpck_require__(340);
+const redirectPolicy_js_1 = __nccwpck_require__(8601);
+const userAgentPolicy_js_1 = __nccwpck_require__(8945);
+const multipartPolicy_js_1 = __nccwpck_require__(2861);
+const decompressResponsePolicy_js_1 = __nccwpck_require__(1605);
+const defaultRetryPolicy_js_1 = __nccwpck_require__(2948);
+const formDataPolicy_js_1 = __nccwpck_require__(4187);
 const core_util_1 = __nccwpck_require__(402);
-const proxyPolicy_js_1 = __nccwpck_require__(4516);
-const setClientRequestIdPolicy_js_1 = __nccwpck_require__(7115);
-const tlsPolicy_js_1 = __nccwpck_require__(5930);
-const tracingPolicy_js_1 = __nccwpck_require__(6886);
+const proxyPolicy_js_1 = __nccwpck_require__(2113);
+const setClientRequestIdPolicy_js_1 = __nccwpck_require__(904);
+const agentPolicy_js_1 = __nccwpck_require__(996);
+const tlsPolicy_js_1 = __nccwpck_require__(5100);
+const tracingPolicy_js_1 = __nccwpck_require__(5063);
 /**
  * Create a new pipeline with a default set of customizable policies.
  * @param options - Options to configure a custom pipeline.
@@ -69690,6 +69694,9 @@ function createPipelineFromOptions(options) {
     var _a;
     const pipeline = (0, pipeline_js_1.createEmptyPipeline)();
     if (core_util_1.isNodeLike) {
+        if (options.agent) {
+            pipeline.addPolicy((0, agentPolicy_js_1.agentPolicy)(options.agent));
+        }
         if (options.tlsOptions) {
             pipeline.addPolicy((0, tlsPolicy_js_1.tlsPolicy)(options.tlsOptions));
         }
@@ -69719,7 +69726,7 @@ function createPipelineFromOptions(options) {
 
 /***/ }),
 
-/***/ 1933:
+/***/ 2290:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -69727,7 +69734,7 @@ function createPipelineFromOptions(options) {
 // Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createDefaultHttpClient = createDefaultHttpClient;
-const nodeHttpClient_js_1 = __nccwpck_require__(9212);
+const nodeHttpClient_js_1 = __nccwpck_require__(7597);
 /**
  * Create the correct HttpClient for the current environment.
  */
@@ -69738,7 +69745,7 @@ function createDefaultHttpClient() {
 
 /***/ }),
 
-/***/ 4785:
+/***/ 8830:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -69836,88 +69843,91 @@ function createHttpHeaders(rawHeaders) {
 
 /***/ }),
 
-/***/ 2655:
+/***/ 4780:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.createFileFromStream = exports.createFile = exports.auxiliaryAuthenticationHeaderPolicyName = exports.auxiliaryAuthenticationHeaderPolicy = exports.ndJsonPolicyName = exports.ndJsonPolicy = exports.bearerTokenAuthenticationPolicyName = exports.bearerTokenAuthenticationPolicy = exports.formDataPolicyName = exports.formDataPolicy = exports.tlsPolicyName = exports.tlsPolicy = exports.userAgentPolicyName = exports.userAgentPolicy = exports.defaultRetryPolicy = exports.tracingPolicyName = exports.tracingPolicy = exports.retryPolicy = exports.throttlingRetryPolicyName = exports.throttlingRetryPolicy = exports.systemErrorRetryPolicyName = exports.systemErrorRetryPolicy = exports.redirectPolicyName = exports.redirectPolicy = exports.getDefaultProxySettings = exports.proxyPolicyName = exports.proxyPolicy = exports.multipartPolicyName = exports.multipartPolicy = exports.logPolicyName = exports.logPolicy = exports.setClientRequestIdPolicyName = exports.setClientRequestIdPolicy = exports.exponentialRetryPolicyName = exports.exponentialRetryPolicy = exports.decompressResponsePolicyName = exports.decompressResponsePolicy = exports.isRestError = exports.RestError = exports.createPipelineRequest = exports.createHttpHeaders = exports.createDefaultHttpClient = exports.createPipelineFromOptions = exports.createEmptyPipeline = void 0;
-var pipeline_js_1 = __nccwpck_require__(5493);
+exports.createFileFromStream = exports.createFile = exports.agentPolicyName = exports.agentPolicy = exports.auxiliaryAuthenticationHeaderPolicyName = exports.auxiliaryAuthenticationHeaderPolicy = exports.ndJsonPolicyName = exports.ndJsonPolicy = exports.bearerTokenAuthenticationPolicyName = exports.bearerTokenAuthenticationPolicy = exports.formDataPolicyName = exports.formDataPolicy = exports.tlsPolicyName = exports.tlsPolicy = exports.userAgentPolicyName = exports.userAgentPolicy = exports.defaultRetryPolicy = exports.tracingPolicyName = exports.tracingPolicy = exports.retryPolicy = exports.throttlingRetryPolicyName = exports.throttlingRetryPolicy = exports.systemErrorRetryPolicyName = exports.systemErrorRetryPolicy = exports.redirectPolicyName = exports.redirectPolicy = exports.getDefaultProxySettings = exports.proxyPolicyName = exports.proxyPolicy = exports.multipartPolicyName = exports.multipartPolicy = exports.logPolicyName = exports.logPolicy = exports.setClientRequestIdPolicyName = exports.setClientRequestIdPolicy = exports.exponentialRetryPolicyName = exports.exponentialRetryPolicy = exports.decompressResponsePolicyName = exports.decompressResponsePolicy = exports.isRestError = exports.RestError = exports.createPipelineRequest = exports.createHttpHeaders = exports.createDefaultHttpClient = exports.createPipelineFromOptions = exports.createEmptyPipeline = void 0;
+var pipeline_js_1 = __nccwpck_require__(340);
 Object.defineProperty(exports, "createEmptyPipeline", ({ enumerable: true, get: function () { return pipeline_js_1.createEmptyPipeline; } }));
-var createPipelineFromOptions_js_1 = __nccwpck_require__(6691);
+var createPipelineFromOptions_js_1 = __nccwpck_require__(388);
 Object.defineProperty(exports, "createPipelineFromOptions", ({ enumerable: true, get: function () { return createPipelineFromOptions_js_1.createPipelineFromOptions; } }));
-var defaultHttpClient_js_1 = __nccwpck_require__(1933);
+var defaultHttpClient_js_1 = __nccwpck_require__(2290);
 Object.defineProperty(exports, "createDefaultHttpClient", ({ enumerable: true, get: function () { return defaultHttpClient_js_1.createDefaultHttpClient; } }));
-var httpHeaders_js_1 = __nccwpck_require__(4785);
+var httpHeaders_js_1 = __nccwpck_require__(8830);
 Object.defineProperty(exports, "createHttpHeaders", ({ enumerable: true, get: function () { return httpHeaders_js_1.createHttpHeaders; } }));
-var pipelineRequest_js_1 = __nccwpck_require__(100);
+var pipelineRequest_js_1 = __nccwpck_require__(1055);
 Object.defineProperty(exports, "createPipelineRequest", ({ enumerable: true, get: function () { return pipelineRequest_js_1.createPipelineRequest; } }));
-var restError_js_1 = __nccwpck_require__(7251);
+var restError_js_1 = __nccwpck_require__(8672);
 Object.defineProperty(exports, "RestError", ({ enumerable: true, get: function () { return restError_js_1.RestError; } }));
 Object.defineProperty(exports, "isRestError", ({ enumerable: true, get: function () { return restError_js_1.isRestError; } }));
-var decompressResponsePolicy_js_1 = __nccwpck_require__(278);
+var decompressResponsePolicy_js_1 = __nccwpck_require__(1605);
 Object.defineProperty(exports, "decompressResponsePolicy", ({ enumerable: true, get: function () { return decompressResponsePolicy_js_1.decompressResponsePolicy; } }));
 Object.defineProperty(exports, "decompressResponsePolicyName", ({ enumerable: true, get: function () { return decompressResponsePolicy_js_1.decompressResponsePolicyName; } }));
-var exponentialRetryPolicy_js_1 = __nccwpck_require__(4537);
+var exponentialRetryPolicy_js_1 = __nccwpck_require__(6390);
 Object.defineProperty(exports, "exponentialRetryPolicy", ({ enumerable: true, get: function () { return exponentialRetryPolicy_js_1.exponentialRetryPolicy; } }));
 Object.defineProperty(exports, "exponentialRetryPolicyName", ({ enumerable: true, get: function () { return exponentialRetryPolicy_js_1.exponentialRetryPolicyName; } }));
-var setClientRequestIdPolicy_js_1 = __nccwpck_require__(7115);
+var setClientRequestIdPolicy_js_1 = __nccwpck_require__(904);
 Object.defineProperty(exports, "setClientRequestIdPolicy", ({ enumerable: true, get: function () { return setClientRequestIdPolicy_js_1.setClientRequestIdPolicy; } }));
 Object.defineProperty(exports, "setClientRequestIdPolicyName", ({ enumerable: true, get: function () { return setClientRequestIdPolicy_js_1.setClientRequestIdPolicyName; } }));
-var logPolicy_js_1 = __nccwpck_require__(4950);
+var logPolicy_js_1 = __nccwpck_require__(6815);
 Object.defineProperty(exports, "logPolicy", ({ enumerable: true, get: function () { return logPolicy_js_1.logPolicy; } }));
 Object.defineProperty(exports, "logPolicyName", ({ enumerable: true, get: function () { return logPolicy_js_1.logPolicyName; } }));
-var multipartPolicy_js_1 = __nccwpck_require__(6352);
+var multipartPolicy_js_1 = __nccwpck_require__(2861);
 Object.defineProperty(exports, "multipartPolicy", ({ enumerable: true, get: function () { return multipartPolicy_js_1.multipartPolicy; } }));
 Object.defineProperty(exports, "multipartPolicyName", ({ enumerable: true, get: function () { return multipartPolicy_js_1.multipartPolicyName; } }));
-var proxyPolicy_js_1 = __nccwpck_require__(4516);
+var proxyPolicy_js_1 = __nccwpck_require__(2113);
 Object.defineProperty(exports, "proxyPolicy", ({ enumerable: true, get: function () { return proxyPolicy_js_1.proxyPolicy; } }));
 Object.defineProperty(exports, "proxyPolicyName", ({ enumerable: true, get: function () { return proxyPolicy_js_1.proxyPolicyName; } }));
 Object.defineProperty(exports, "getDefaultProxySettings", ({ enumerable: true, get: function () { return proxyPolicy_js_1.getDefaultProxySettings; } }));
-var redirectPolicy_js_1 = __nccwpck_require__(9654);
+var redirectPolicy_js_1 = __nccwpck_require__(8601);
 Object.defineProperty(exports, "redirectPolicy", ({ enumerable: true, get: function () { return redirectPolicy_js_1.redirectPolicy; } }));
 Object.defineProperty(exports, "redirectPolicyName", ({ enumerable: true, get: function () { return redirectPolicy_js_1.redirectPolicyName; } }));
-var systemErrorRetryPolicy_js_1 = __nccwpck_require__(5599);
+var systemErrorRetryPolicy_js_1 = __nccwpck_require__(8588);
 Object.defineProperty(exports, "systemErrorRetryPolicy", ({ enumerable: true, get: function () { return systemErrorRetryPolicy_js_1.systemErrorRetryPolicy; } }));
 Object.defineProperty(exports, "systemErrorRetryPolicyName", ({ enumerable: true, get: function () { return systemErrorRetryPolicy_js_1.systemErrorRetryPolicyName; } }));
-var throttlingRetryPolicy_js_1 = __nccwpck_require__(2951);
+var throttlingRetryPolicy_js_1 = __nccwpck_require__(3606);
 Object.defineProperty(exports, "throttlingRetryPolicy", ({ enumerable: true, get: function () { return throttlingRetryPolicy_js_1.throttlingRetryPolicy; } }));
 Object.defineProperty(exports, "throttlingRetryPolicyName", ({ enumerable: true, get: function () { return throttlingRetryPolicy_js_1.throttlingRetryPolicyName; } }));
-var retryPolicy_js_1 = __nccwpck_require__(5014);
+var retryPolicy_js_1 = __nccwpck_require__(3455);
 Object.defineProperty(exports, "retryPolicy", ({ enumerable: true, get: function () { return retryPolicy_js_1.retryPolicy; } }));
-var tracingPolicy_js_1 = __nccwpck_require__(6886);
+var tracingPolicy_js_1 = __nccwpck_require__(5063);
 Object.defineProperty(exports, "tracingPolicy", ({ enumerable: true, get: function () { return tracingPolicy_js_1.tracingPolicy; } }));
 Object.defineProperty(exports, "tracingPolicyName", ({ enumerable: true, get: function () { return tracingPolicy_js_1.tracingPolicyName; } }));
-var defaultRetryPolicy_js_1 = __nccwpck_require__(847);
+var defaultRetryPolicy_js_1 = __nccwpck_require__(2948);
 Object.defineProperty(exports, "defaultRetryPolicy", ({ enumerable: true, get: function () { return defaultRetryPolicy_js_1.defaultRetryPolicy; } }));
-var userAgentPolicy_js_1 = __nccwpck_require__(2520);
+var userAgentPolicy_js_1 = __nccwpck_require__(8945);
 Object.defineProperty(exports, "userAgentPolicy", ({ enumerable: true, get: function () { return userAgentPolicy_js_1.userAgentPolicy; } }));
 Object.defineProperty(exports, "userAgentPolicyName", ({ enumerable: true, get: function () { return userAgentPolicy_js_1.userAgentPolicyName; } }));
-var tlsPolicy_js_1 = __nccwpck_require__(5930);
+var tlsPolicy_js_1 = __nccwpck_require__(5100);
 Object.defineProperty(exports, "tlsPolicy", ({ enumerable: true, get: function () { return tlsPolicy_js_1.tlsPolicy; } }));
 Object.defineProperty(exports, "tlsPolicyName", ({ enumerable: true, get: function () { return tlsPolicy_js_1.tlsPolicyName; } }));
-var formDataPolicy_js_1 = __nccwpck_require__(2696);
+var formDataPolicy_js_1 = __nccwpck_require__(4187);
 Object.defineProperty(exports, "formDataPolicy", ({ enumerable: true, get: function () { return formDataPolicy_js_1.formDataPolicy; } }));
 Object.defineProperty(exports, "formDataPolicyName", ({ enumerable: true, get: function () { return formDataPolicy_js_1.formDataPolicyName; } }));
-var bearerTokenAuthenticationPolicy_js_1 = __nccwpck_require__(3934);
+var bearerTokenAuthenticationPolicy_js_1 = __nccwpck_require__(7295);
 Object.defineProperty(exports, "bearerTokenAuthenticationPolicy", ({ enumerable: true, get: function () { return bearerTokenAuthenticationPolicy_js_1.bearerTokenAuthenticationPolicy; } }));
 Object.defineProperty(exports, "bearerTokenAuthenticationPolicyName", ({ enumerable: true, get: function () { return bearerTokenAuthenticationPolicy_js_1.bearerTokenAuthenticationPolicyName; } }));
-var ndJsonPolicy_js_1 = __nccwpck_require__(7938);
+var ndJsonPolicy_js_1 = __nccwpck_require__(7229);
 Object.defineProperty(exports, "ndJsonPolicy", ({ enumerable: true, get: function () { return ndJsonPolicy_js_1.ndJsonPolicy; } }));
 Object.defineProperty(exports, "ndJsonPolicyName", ({ enumerable: true, get: function () { return ndJsonPolicy_js_1.ndJsonPolicyName; } }));
-var auxiliaryAuthenticationHeaderPolicy_js_1 = __nccwpck_require__(7413);
+var auxiliaryAuthenticationHeaderPolicy_js_1 = __nccwpck_require__(216);
 Object.defineProperty(exports, "auxiliaryAuthenticationHeaderPolicy", ({ enumerable: true, get: function () { return auxiliaryAuthenticationHeaderPolicy_js_1.auxiliaryAuthenticationHeaderPolicy; } }));
 Object.defineProperty(exports, "auxiliaryAuthenticationHeaderPolicyName", ({ enumerable: true, get: function () { return auxiliaryAuthenticationHeaderPolicy_js_1.auxiliaryAuthenticationHeaderPolicyName; } }));
-var file_js_1 = __nccwpck_require__(1384);
+var agentPolicy_js_1 = __nccwpck_require__(996);
+Object.defineProperty(exports, "agentPolicy", ({ enumerable: true, get: function () { return agentPolicy_js_1.agentPolicy; } }));
+Object.defineProperty(exports, "agentPolicyName", ({ enumerable: true, get: function () { return agentPolicy_js_1.agentPolicyName; } }));
+var file_js_1 = __nccwpck_require__(9047);
 Object.defineProperty(exports, "createFile", ({ enumerable: true, get: function () { return file_js_1.createFile; } }));
 Object.defineProperty(exports, "createFileFromStream", ({ enumerable: true, get: function () { return file_js_1.createFileFromStream; } }));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 5441:
+/***/ 406:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -69931,7 +69941,7 @@ exports.logger = (0, logger_1.createClientLogger)("core-rest-pipeline");
 
 /***/ }),
 
-/***/ 9212:
+/***/ 7597:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -69946,9 +69956,9 @@ const https = tslib_1.__importStar(__nccwpck_require__(4708));
 const zlib = tslib_1.__importStar(__nccwpck_require__(8522));
 const node_stream_1 = __nccwpck_require__(7075);
 const abort_controller_1 = __nccwpck_require__(764);
-const httpHeaders_js_1 = __nccwpck_require__(4785);
-const restError_js_1 = __nccwpck_require__(7251);
-const log_js_1 = __nccwpck_require__(5441);
+const httpHeaders_js_1 = __nccwpck_require__(8830);
+const restError_js_1 = __nccwpck_require__(8672);
+const log_js_1 = __nccwpck_require__(406);
 const DEFAULT_TLS_SETTINGS = {};
 function isReadableStream(body) {
     return body && typeof body.pipe === "function";
@@ -70283,7 +70293,7 @@ function createNodeHttpClient() {
 
 /***/ }),
 
-/***/ 5493:
+/***/ 340:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -70554,7 +70564,7 @@ function createEmptyPipeline() {
 
 /***/ }),
 
-/***/ 100:
+/***/ 1055:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -70562,7 +70572,7 @@ function createEmptyPipeline() {
 // Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createPipelineRequest = createPipelineRequest;
-const httpHeaders_js_1 = __nccwpck_require__(4785);
+const httpHeaders_js_1 = __nccwpck_require__(8830);
 const core_util_1 = __nccwpck_require__(402);
 class PipelineRequestImpl {
     constructor(options) {
@@ -70585,6 +70595,8 @@ class PipelineRequestImpl {
         this.requestId = options.requestId || (0, core_util_1.randomUUID)();
         this.allowInsecureConnection = (_f = options.allowInsecureConnection) !== null && _f !== void 0 ? _f : false;
         this.enableBrowserStreams = (_g = options.enableBrowserStreams) !== null && _g !== void 0 ? _g : false;
+        this.agent = options.agent;
+        this.tlsSettings = options.tlsSettings;
     }
 }
 /**
@@ -70599,7 +70611,39 @@ function createPipelineRequest(options) {
 
 /***/ }),
 
-/***/ 7413:
+/***/ 996:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.agentPolicyName = void 0;
+exports.agentPolicy = agentPolicy;
+/**
+ * Name of the Agent Policy
+ */
+exports.agentPolicyName = "agentPolicy";
+/**
+ * Gets a pipeline policy that sets http.agent
+ */
+function agentPolicy(agent) {
+    return {
+        name: exports.agentPolicyName,
+        sendRequest: async (req, next) => {
+            // Users may define an agent on the request, honor it over the client level one
+            if (!req.agent) {
+                req.agent = agent;
+            }
+            return next(req);
+        },
+    };
+}
+//# sourceMappingURL=agentPolicy.js.map
+
+/***/ }),
+
+/***/ 216:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -70608,8 +70652,8 @@ function createPipelineRequest(options) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.auxiliaryAuthenticationHeaderPolicyName = void 0;
 exports.auxiliaryAuthenticationHeaderPolicy = auxiliaryAuthenticationHeaderPolicy;
-const tokenCycler_js_1 = __nccwpck_require__(6093);
-const log_js_1 = __nccwpck_require__(5441);
+const tokenCycler_js_1 = __nccwpck_require__(680);
+const log_js_1 = __nccwpck_require__(406);
 /**
  * The programmatic identifier of the auxiliaryAuthenticationHeaderPolicy.
  */
@@ -70672,7 +70716,7 @@ function auxiliaryAuthenticationHeaderPolicy(options) {
 
 /***/ }),
 
-/***/ 3934:
+/***/ 7295:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -70682,9 +70726,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.bearerTokenAuthenticationPolicyName = void 0;
 exports.bearerTokenAuthenticationPolicy = bearerTokenAuthenticationPolicy;
 exports.parseChallenges = parseChallenges;
-const tokenCycler_js_1 = __nccwpck_require__(6093);
-const log_js_1 = __nccwpck_require__(5441);
-const restError_js_1 = __nccwpck_require__(7251);
+const tokenCycler_js_1 = __nccwpck_require__(680);
+const log_js_1 = __nccwpck_require__(406);
+const restError_js_1 = __nccwpck_require__(8672);
 /**
  * The programmatic identifier of the bearerTokenAuthenticationPolicy.
  */
@@ -70921,7 +70965,7 @@ function getCaeChallengeClaims(challenges) {
 
 /***/ }),
 
-/***/ 278:
+/***/ 1605:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -70954,7 +70998,7 @@ function decompressResponsePolicy() {
 
 /***/ }),
 
-/***/ 847:
+/***/ 2948:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -70963,10 +71007,10 @@ function decompressResponsePolicy() {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.defaultRetryPolicyName = void 0;
 exports.defaultRetryPolicy = defaultRetryPolicy;
-const exponentialRetryStrategy_js_1 = __nccwpck_require__(4453);
-const throttlingRetryStrategy_js_1 = __nccwpck_require__(7837);
-const retryPolicy_js_1 = __nccwpck_require__(5014);
-const constants_js_1 = __nccwpck_require__(3666);
+const exponentialRetryStrategy_js_1 = __nccwpck_require__(1400);
+const throttlingRetryStrategy_js_1 = __nccwpck_require__(3522);
+const retryPolicy_js_1 = __nccwpck_require__(3455);
+const constants_js_1 = __nccwpck_require__(3425);
 /**
  * Name of the {@link defaultRetryPolicy}
  */
@@ -70990,7 +71034,7 @@ function defaultRetryPolicy(options = {}) {
 
 /***/ }),
 
-/***/ 4537:
+/***/ 6390:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -70999,9 +71043,9 @@ function defaultRetryPolicy(options = {}) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.exponentialRetryPolicyName = void 0;
 exports.exponentialRetryPolicy = exponentialRetryPolicy;
-const exponentialRetryStrategy_js_1 = __nccwpck_require__(4453);
-const retryPolicy_js_1 = __nccwpck_require__(5014);
-const constants_js_1 = __nccwpck_require__(3666);
+const exponentialRetryStrategy_js_1 = __nccwpck_require__(1400);
+const retryPolicy_js_1 = __nccwpck_require__(3455);
+const constants_js_1 = __nccwpck_require__(3425);
 /**
  * The programmatic identifier of the exponentialRetryPolicy.
  */
@@ -71022,7 +71066,7 @@ function exponentialRetryPolicy(options = {}) {
 
 /***/ }),
 
-/***/ 2696:
+/***/ 4187:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -71032,7 +71076,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.formDataPolicyName = void 0;
 exports.formDataPolicy = formDataPolicy;
 const core_util_1 = __nccwpck_require__(402);
-const httpHeaders_js_1 = __nccwpck_require__(4785);
+const httpHeaders_js_1 = __nccwpck_require__(8830);
 /**
  * The programmatic identifier of the formDataPolicy.
  */
@@ -71128,7 +71172,7 @@ async function prepareFormData(formData, request) {
 
 /***/ }),
 
-/***/ 4950:
+/***/ 6815:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -71137,8 +71181,8 @@ async function prepareFormData(formData, request) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.logPolicyName = void 0;
 exports.logPolicy = logPolicy;
-const log_js_1 = __nccwpck_require__(5441);
-const sanitizer_js_1 = __nccwpck_require__(3607);
+const log_js_1 = __nccwpck_require__(406);
+const sanitizer_js_1 = __nccwpck_require__(2954);
 /**
  * The programmatic identifier of the logPolicy.
  */
@@ -71172,7 +71216,7 @@ function logPolicy(options = {}) {
 
 /***/ }),
 
-/***/ 6352:
+/***/ 2861:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -71182,8 +71226,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.multipartPolicyName = void 0;
 exports.multipartPolicy = multipartPolicy;
 const core_util_1 = __nccwpck_require__(402);
-const concat_js_1 = __nccwpck_require__(3582);
-const typeGuards_js_1 = __nccwpck_require__(5820);
+const concat_js_1 = __nccwpck_require__(7585);
+const typeGuards_js_1 = __nccwpck_require__(5107);
 function generateBoundary() {
     return `----AzSDKFormBoundary${(0, core_util_1.randomUUID)()}`;
 }
@@ -71293,7 +71337,7 @@ function multipartPolicy() {
 
 /***/ }),
 
-/***/ 7938:
+/***/ 7229:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -71328,7 +71372,7 @@ function ndJsonPolicy() {
 
 /***/ }),
 
-/***/ 4516:
+/***/ 2113:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -71341,7 +71385,7 @@ exports.getDefaultProxySettings = getDefaultProxySettings;
 exports.proxyPolicy = proxyPolicy;
 const https_proxy_agent_1 = __nccwpck_require__(9946);
 const http_proxy_agent_1 = __nccwpck_require__(4702);
-const log_js_1 = __nccwpck_require__(5441);
+const log_js_1 = __nccwpck_require__(406);
 const HTTPS_PROXY = "HTTPS_PROXY";
 const HTTP_PROXY = "HTTP_PROXY";
 const ALL_PROXY = "ALL_PROXY";
@@ -71531,7 +71575,7 @@ function proxyPolicy(proxySettings, options) {
 
 /***/ }),
 
-/***/ 9654:
+/***/ 8601:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -71593,7 +71637,7 @@ async function handleRedirect(next, response, maxRetries, currentRetries = 0) {
 
 /***/ }),
 
-/***/ 5014:
+/***/ 3455:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -71601,10 +71645,10 @@ async function handleRedirect(next, response, maxRetries, currentRetries = 0) {
 // Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.retryPolicy = retryPolicy;
-const helpers_js_1 = __nccwpck_require__(1893);
+const helpers_js_1 = __nccwpck_require__(8600);
 const logger_1 = __nccwpck_require__(5851);
 const abort_controller_1 = __nccwpck_require__(764);
-const constants_js_1 = __nccwpck_require__(3666);
+const constants_js_1 = __nccwpck_require__(3425);
 const retryPolicyLogger = (0, logger_1.createClientLogger)("core-rest-pipeline retryPolicy");
 /**
  * The programmatic identifier of the retryPolicy.
@@ -71707,7 +71751,7 @@ function retryPolicy(strategies, options = { maxRetries: constants_js_1.DEFAULT_
 
 /***/ }),
 
-/***/ 7115:
+/***/ 904:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -71741,7 +71785,7 @@ function setClientRequestIdPolicy(requestIdHeaderName = "x-ms-client-request-id"
 
 /***/ }),
 
-/***/ 5599:
+/***/ 8588:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -71750,9 +71794,9 @@ function setClientRequestIdPolicy(requestIdHeaderName = "x-ms-client-request-id"
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.systemErrorRetryPolicyName = void 0;
 exports.systemErrorRetryPolicy = systemErrorRetryPolicy;
-const exponentialRetryStrategy_js_1 = __nccwpck_require__(4453);
-const retryPolicy_js_1 = __nccwpck_require__(5014);
-const constants_js_1 = __nccwpck_require__(3666);
+const exponentialRetryStrategy_js_1 = __nccwpck_require__(1400);
+const retryPolicy_js_1 = __nccwpck_require__(3455);
+const constants_js_1 = __nccwpck_require__(3425);
 /**
  * Name of the {@link systemErrorRetryPolicy}
  */
@@ -71778,7 +71822,7 @@ function systemErrorRetryPolicy(options = {}) {
 
 /***/ }),
 
-/***/ 2951:
+/***/ 3606:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -71787,9 +71831,9 @@ function systemErrorRetryPolicy(options = {}) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.throttlingRetryPolicyName = void 0;
 exports.throttlingRetryPolicy = throttlingRetryPolicy;
-const throttlingRetryStrategy_js_1 = __nccwpck_require__(7837);
-const retryPolicy_js_1 = __nccwpck_require__(5014);
-const constants_js_1 = __nccwpck_require__(3666);
+const throttlingRetryStrategy_js_1 = __nccwpck_require__(3522);
+const retryPolicy_js_1 = __nccwpck_require__(3455);
+const constants_js_1 = __nccwpck_require__(3425);
 /**
  * Name of the {@link throttlingRetryPolicy}
  */
@@ -71798,9 +71842,9 @@ exports.throttlingRetryPolicyName = "throttlingRetryPolicy";
  * A policy that retries when the server sends a 429 response with a Retry-After header.
  *
  * To learn more, please refer to
- * https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-request-limits,
- * https://docs.microsoft.com/en-us/azure/azure-subscription-service-limits and
- * https://docs.microsoft.com/en-us/azure/virtual-machines/troubleshooting/troubleshooting-throttling-errors
+ * https://learn.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-request-limits,
+ * https://learn.microsoft.com/en-us/azure/azure-subscription-service-limits and
+ * https://learn.microsoft.com/en-us/azure/virtual-machines/troubleshooting/troubleshooting-throttling-errors
  *
  * @param options - Options that configure retry logic.
  */
@@ -71817,7 +71861,7 @@ function throttlingRetryPolicy(options = {}) {
 
 /***/ }),
 
-/***/ 5930:
+/***/ 5100:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -71849,7 +71893,7 @@ function tlsPolicy(tlsSettings) {
 
 /***/ }),
 
-/***/ 6886:
+/***/ 5063:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -71859,12 +71903,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.tracingPolicyName = void 0;
 exports.tracingPolicy = tracingPolicy;
 const core_tracing_1 = __nccwpck_require__(9340);
-const constants_js_1 = __nccwpck_require__(3666);
-const userAgent_js_1 = __nccwpck_require__(7444);
-const log_js_1 = __nccwpck_require__(5441);
+const constants_js_1 = __nccwpck_require__(3425);
+const userAgent_js_1 = __nccwpck_require__(13);
+const log_js_1 = __nccwpck_require__(406);
 const core_util_1 = __nccwpck_require__(402);
-const restError_js_1 = __nccwpck_require__(7251);
-const sanitizer_js_1 = __nccwpck_require__(3607);
+const restError_js_1 = __nccwpck_require__(8672);
+const sanitizer_js_1 = __nccwpck_require__(2954);
 /**
  * The programmatic identifier of the tracingPolicy.
  */
@@ -71991,7 +72035,7 @@ function tryProcessResponse(span, response) {
 
 /***/ }),
 
-/***/ 2520:
+/***/ 8945:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -72000,7 +72044,7 @@ function tryProcessResponse(span, response) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.userAgentPolicyName = void 0;
 exports.userAgentPolicy = userAgentPolicy;
-const userAgent_js_1 = __nccwpck_require__(7444);
+const userAgent_js_1 = __nccwpck_require__(13);
 const UserAgentHeaderName = (0, userAgent_js_1.getUserAgentHeaderName)();
 /**
  * The programmatic identifier of the userAgentPolicy.
@@ -72027,7 +72071,7 @@ function userAgentPolicy(options = {}) {
 
 /***/ }),
 
-/***/ 7251:
+/***/ 8672:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -72037,8 +72081,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RestError = void 0;
 exports.isRestError = isRestError;
 const core_util_1 = __nccwpck_require__(402);
-const inspect_js_1 = __nccwpck_require__(4684);
-const sanitizer_js_1 = __nccwpck_require__(3607);
+const inspect_js_1 = __nccwpck_require__(781);
+const sanitizer_js_1 = __nccwpck_require__(2954);
 const errorSanitizer = new sanitizer_js_1.Sanitizer();
 /**
  * A custom error type for failed pipeline requests.
@@ -72092,7 +72136,7 @@ function isRestError(e) {
 
 /***/ }),
 
-/***/ 4453:
+/***/ 1400:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -72103,7 +72147,7 @@ exports.exponentialRetryStrategy = exponentialRetryStrategy;
 exports.isExponentialRetryResponse = isExponentialRetryResponse;
 exports.isSystemError = isSystemError;
 const core_util_1 = __nccwpck_require__(402);
-const throttlingRetryStrategy_js_1 = __nccwpck_require__(7837);
+const throttlingRetryStrategy_js_1 = __nccwpck_require__(3522);
 // intervals are in milliseconds
 const DEFAULT_CLIENT_RETRY_INTERVAL = 1000;
 const DEFAULT_CLIENT_MAX_RETRY_INTERVAL = 1000 * 64;
@@ -72167,7 +72211,7 @@ function isSystemError(err) {
 
 /***/ }),
 
-/***/ 7837:
+/***/ 3522:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -72176,7 +72220,7 @@ function isSystemError(err) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.isThrottlingRetryResponse = isThrottlingRetryResponse;
 exports.throttlingRetryStrategy = throttlingRetryStrategy;
-const helpers_js_1 = __nccwpck_require__(1893);
+const helpers_js_1 = __nccwpck_require__(8600);
 /**
  * The header that comes back from Azure services representing
  * the amount of time (minimum) to wait to retry (in seconds or timestamp after which we can retry).
@@ -72251,7 +72295,7 @@ function throttlingRetryStrategy() {
 
 /***/ }),
 
-/***/ 3582:
+/***/ 7585:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -72261,8 +72305,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.concat = concat;
 const tslib_1 = __nccwpck_require__(1577);
 const node_stream_1 = __nccwpck_require__(7075);
-const typeGuards_js_1 = __nccwpck_require__(5820);
-const file_js_1 = __nccwpck_require__(1384);
+const typeGuards_js_1 = __nccwpck_require__(5107);
+const file_js_1 = __nccwpck_require__(9047);
 function streamAsyncIterator() {
     return tslib_1.__asyncGenerator(this, arguments, function* streamAsyncIterator_1() {
         const reader = this.getReader();
@@ -72348,7 +72392,7 @@ async function concat(sources) {
 
 /***/ }),
 
-/***/ 1384:
+/***/ 9047:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -72359,7 +72403,7 @@ exports.getRawContent = getRawContent;
 exports.createFileFromStream = createFileFromStream;
 exports.createFile = createFile;
 const core_util_1 = __nccwpck_require__(402);
-const typeGuards_js_1 = __nccwpck_require__(5820);
+const typeGuards_js_1 = __nccwpck_require__(5107);
 const unimplementedMethods = {
     arrayBuffer: () => {
         throw new Error("Not implemented");
@@ -72458,7 +72502,7 @@ function createFile(content, name, options = {}) {
 
 /***/ }),
 
-/***/ 1893:
+/***/ 8600:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -72526,7 +72570,7 @@ function parseHeaderValueAsNumber(response, headerName) {
 
 /***/ }),
 
-/***/ 4684:
+/***/ 781:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -72540,7 +72584,7 @@ exports.custom = node_util_1.inspect.custom;
 
 /***/ }),
 
-/***/ 3607:
+/***/ 2954:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -72689,7 +72733,7 @@ exports.Sanitizer = Sanitizer;
 
 /***/ }),
 
-/***/ 6093:
+/***/ 680:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -72698,7 +72742,7 @@ exports.Sanitizer = Sanitizer;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DEFAULT_CYCLER_OPTIONS = void 0;
 exports.createTokenCycler = createTokenCycler;
-const helpers_js_1 = __nccwpck_require__(1893);
+const helpers_js_1 = __nccwpck_require__(8600);
 // Default options for the cycler if none are provided
 exports.DEFAULT_CYCLER_OPTIONS = {
     forcedRefreshWindowInMs: 1000, // Force waiting for a refresh 1s before the token expires
@@ -72861,7 +72905,7 @@ function createTokenCycler(credential, tokenCyclerOptions) {
 
 /***/ }),
 
-/***/ 5820:
+/***/ 5107:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -72890,7 +72934,7 @@ function isBlob(x) {
 
 /***/ }),
 
-/***/ 7444:
+/***/ 13:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -72899,8 +72943,8 @@ function isBlob(x) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getUserAgentHeaderName = getUserAgentHeaderName;
 exports.getUserAgentValue = getUserAgentValue;
-const userAgentPlatform_js_1 = __nccwpck_require__(3503);
-const constants_js_1 = __nccwpck_require__(3666);
+const userAgentPlatform_js_1 = __nccwpck_require__(1250);
+const constants_js_1 = __nccwpck_require__(3425);
 function getUserAgentString(telemetryInfo) {
     const parts = [];
     for (const [key, value] of telemetryInfo) {
@@ -72930,7 +72974,7 @@ async function getUserAgentValue(prefix) {
 
 /***/ }),
 
-/***/ 3503:
+/***/ 1250:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -73741,7 +73785,7 @@ exports.XML_CHARKEY = "_";
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.stringifyXML = stringifyXML;
 exports.parseXML = parseXML;
-const fast_xml_parser_1 = __nccwpck_require__(5185);
+const fast_xml_parser_1 = __nccwpck_require__(1718);
 const xml_common_js_1 = __nccwpck_require__(2486);
 function getCommonOptions(options) {
     var _a;
@@ -77181,7 +77225,7 @@ class PCancelable {
 
 Object.setPrototypeOf(PCancelable.prototype, Promise.prototype);
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/errors.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/errors.js
 
 // A hacky check to prevent circular references.
 function isRequest(x) {
@@ -78968,13 +79012,13 @@ getContentLength_fn = function() {
 };
 
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/utils/is-form-data.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/utils/is-form-data.js
 
 function is_form_data_isFormData(body) {
     return distribution.nodeStream(body) && distribution.function(body.getBoundary);
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/utils/get-body-size.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/utils/get-body-size.js
 
 
 
@@ -78998,7 +79042,7 @@ async function getBodySize(body, headers) {
     return undefined;
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/utils/proxy-events.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/utils/proxy-events.js
 function proxyEvents(from, to, events) {
     const eventFunctions = {};
     for (const event of events) {
@@ -79017,7 +79061,7 @@ function proxyEvents(from, to, events) {
 
 ;// CONCATENATED MODULE: external "node:net"
 const external_node_net_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:net");
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/utils/unhandle.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/utils/unhandle.js
 // When attaching listeners, it's very easy to forget about them.
 // Especially if you do error handling and set timeouts.
 // So instead of checking if it's proper to throw an error on every timeout ever,
@@ -79039,7 +79083,7 @@ function unhandle() {
     };
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/timed-out.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/timed-out.js
 
 
 const reentry = Symbol('reentry');
@@ -79061,10 +79105,12 @@ function timedOut(request, delays, options) {
     request[reentry] = true;
     const cancelers = [];
     const { once, unhandleAll } = unhandle();
+    const handled = new Map();
     const addTimeout = (delay, callback, event) => {
         const timeout = setTimeout(callback, delay, delay, event);
         timeout.unref?.();
         const cancel = () => {
+            handled.set(event, true);
             clearTimeout(timeout);
         };
         cancelers.push(cancel);
@@ -79072,7 +79118,13 @@ function timedOut(request, delays, options) {
     };
     const { host, hostname } = options;
     const timeoutHandler = (delay, event) => {
-        request.destroy(new timed_out_TimeoutError(delay, event));
+        // Use setTimeout to allow for any cancelled events to be handled first,
+        // to prevent firing any TimeoutError unneeded when the event loop is busy or blocked
+        setTimeout(() => {
+            if (!handled.has(event)) {
+                request.destroy(new timed_out_TimeoutError(delay, event));
+            }
+        }, 0);
     };
     const cancelTimeouts = () => {
         for (const cancel of cancelers) {
@@ -79170,7 +79222,7 @@ function timedOut(request, delays, options) {
     return cancelTimeouts;
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/utils/url-to-options.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/utils/url-to-options.js
 
 function urlToOptions(url) {
     // Cast to URL
@@ -79194,7 +79246,7 @@ function urlToOptions(url) {
     return options;
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/utils/weakable-map.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/utils/weakable-map.js
 class WeakableMap {
     weakMap;
     map;
@@ -79224,7 +79276,7 @@ class WeakableMap {
     }
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/calculate-retry-delay.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/calculate-retry-delay.js
 const calculateRetryDelay = ({ attemptCount, retryOptions, error, retryAfter, computedValue, }) => {
     if (error.name === 'RetryError') {
         return 1;
@@ -79711,7 +79763,7 @@ class CacheableLookup {
 
 // EXTERNAL MODULE: ./node_modules/.pnpm/http2-wrapper@2.2.1/node_modules/http2-wrapper/source/index.js
 var http2_wrapper_source = __nccwpck_require__(5409);
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/parse-link-header.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/parse-link-header.js
 function parseLinkHeader(link) {
     const parsed = [];
     const items = link.split(',');
@@ -79746,7 +79798,7 @@ function parseLinkHeader(link) {
     return parsed;
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/options.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/options.js
 
 
 
@@ -81383,7 +81435,7 @@ class Options {
     }
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/response.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/response.js
 
 const isResponseOk = (response) => {
     const { statusCode } = response;
@@ -81426,19 +81478,19 @@ const parseBody = (response, responseType, parseJson, encoding) => {
     }, response);
 };
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/utils/is-client-request.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/utils/is-client-request.js
 function isClientRequest(clientRequest) {
     return clientRequest.writable && !clientRequest.writableEnded;
 }
 /* harmony default export */ const is_client_request = (isClientRequest);
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/utils/is-unix-socket-url.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/utils/is-unix-socket-url.js
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function isUnixSocketURL(url) {
     return url.protocol === 'unix:' || url.hostname === 'unix';
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/core/index.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/core/index.js
 
 
 
@@ -82445,7 +82497,7 @@ class Request extends external_node_stream_.Duplex {
     }
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/as-promise/types.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/as-promise/types.js
 
 /**
 An error to be thrown when the request is aborted with `.cancel()`.
@@ -82464,7 +82516,7 @@ class types_CancelError extends RequestError {
     }
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/as-promise/index.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/as-promise/index.js
 
 
 
@@ -82630,7 +82682,7 @@ function asPromise(firstRequest) {
     return promise;
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/create.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/create.js
 
 
 
@@ -82812,7 +82864,7 @@ const create = (defaults) => {
 };
 /* harmony default export */ const source_create = (create);
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.5/node_modules/got/dist/source/index.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/got@14.4.6/node_modules/got/dist/source/index.js
 
 
 const defaults = {
@@ -82841,7 +82893,7 @@ const external_node_dns_promises_namespaceObject = __WEBPACK_EXTERNAL_createRequ
 var cache = __nccwpck_require__(5500);
 ;// CONCATENATED MODULE: external "node:child_process"
 const external_node_child_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:child_process");
-;// CONCATENATED MODULE: ./node_modules/.pnpm/github.com+DeterminateSystems+detsys-ts@b3319a2c78c46d5ad6bc00d3453266d3d9fdde44_ulwzeovui5oifch7ww3ifoisei/node_modules/detsys-ts/dist/index.js
+;// CONCATENATED MODULE: ./node_modules/.pnpm/detsys-ts@https+++codeload.github.com+DeterminateSystems+detsys-ts+tar.gz+b3319a2c78c46_a2ecae3e356a134b57d257969eea3e6d/node_modules/detsys-ts/dist/index.js
 var __defProp = Object.defineProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -85212,6 +85264,16 @@ ${stderrBuffer}`
     const currentUser = (0,external_node_os_.userInfo)();
     const isRoot = currentUser.uid === 0;
     const maybeSudo = isRoot ? "" : "sudo";
+    const canAccessKvm = await (0,promises_namespaceObject.access)(
+      "/dev/kvm",
+      external_node_fs_namespaceObject.constants.R_OK | external_node_fs_namespaceObject.constants.W_OK
+    ).then(
+      (_) => true,
+      (_) => false
+    );
+    if (canAccessKvm) {
+      return true;
+    }
     const kvmRules = "/etc/udev/rules.d/99-determinate-nix-installer-kvm.rules";
     try {
       const writeFileExitCode = await exec.exec(
